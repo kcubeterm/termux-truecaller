@@ -1,0 +1,28 @@
+#!/bin/bash
+
+while true ;
+do 
+	termux-call-log -l 1 >| ~/.cache/call.log
+	log=~/.cache/call.log
+	#cat $log
+	processed_log=~/.cache/processed_call.log
+	touch $processed_log
+	
+	name=`jq -r .[0].name $log`
+	num=`jq -r .[0].phone_number $log`
+	
+	if [[ $name == "UNKNOWN_CALLER" ]];
+	then
+		processed=false
+		processed_num=`head -n1 $processed_log`
+		if [[ $processed_num !=  $num ]];
+		then
+			name_out=`truecaller search  ${num:(-10)}`
+			
+			echo $num > $processed_log
+			echo "processed"
+			termux-notification -c "$num $name_out" --button1 call --button1-action "termux-telephony-call $num"
+			
+		fi
+	fi
+done
