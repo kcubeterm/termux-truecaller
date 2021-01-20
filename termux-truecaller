@@ -21,7 +21,7 @@ do
 			
 			echo $num > $processed_log
 			echo "processed"
-			termux-notification -c "$num $name_out" --button1 call --button1-action "termux-telephony-call $num"
+			termux-notification -t Truecaller -c "$num $name_out" --button1 call --button1-action "termux-telephony-call $num"
 			
 		fi
 	fi
